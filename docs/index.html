@@ -1,0 +1,404 @@
+<!DOCTYPE html>
+<html lang="pt-BR">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width,initial-scale=1.0,maximum-scale=1.0,user-scalable=no">
+<title>ZARNS - Meu Horario</title>
+<meta name="theme-color" content="#0f172a">
+<meta name="apple-mobile-web-app-capable" content="yes">
+<meta name="apple-mobile-web-app-status-bar-style" content="black-translucent">
+<link rel="manifest" href="manifest.json">
+<link href="https://fonts.googleapis.com/css2?family=Inter:wght@300;400;500;600;700;800&display=swap" rel="stylesheet">
+<link href="https://cdn.jsdelivr.net/npm/lucide-static@latest/font/lucide.min.css" rel="stylesheet">
+<style>
+*{margin:0;padding:0;box-sizing:border-box}
+:root{
+--bg:#0f172a;--bg2:#1e293b;--bg3:#334155;--card:#1e293b;
+--accent:#3b82f6;--accent2:#8b5cf6;--accent3:#06b6d4;
+--green:#22c55e;--orange:#f59e0b;--red:#ef4444;--pink:#ec4899;
+--text:#f8fafc;--text2:#94a3b8;--text3:#64748b;
+--border:#334155;--glass:rgba(30,41,59,0.8);
+--radius:16px;--radius2:12px;
+}
+body{font-family:'Inter',sans-serif;background:var(--bg);color:var(--text);min-height:100vh;overflow-x:hidden}
+.app{max-width:480px;margin:0 auto;padding-bottom:90px}
+/* Header */
+.header{padding:20px 16px 16px;background:linear-gradient(135deg,#0f172a 0%,#1e293b 100%);position:sticky;top:0;z-index:100;backdrop-filter:blur(20px)}
+.header-top{display:flex;align-items:center;justify-content:space-between;margin-bottom:16px}
+.logo{display:flex;align-items:center;gap:10px}
+.logo-icon{width:40px;height:40px;background:linear-gradient(135deg,var(--accent),var(--accent2));border-radius:12px;display:flex;align-items:center;justify-content:center;font-weight:800;font-size:16px}
+.logo-text h1{font-size:18px;font-weight:700;letter-spacing:-0.5px}
+.logo-text span{font-size:11px;color:var(--text2);font-weight:400}
+.header-badge{background:var(--green);color:#000;padding:4px 10px;border-radius:20px;font-size:11px;font-weight:600}
+/* Status Card */
+.status-card{margin:0 16px;padding:20px;background:linear-gradient(135deg,var(--accent),var(--accent2));border-radius:var(--radius);position:relative;overflow:hidden}
+.status-card::before{content:'';position:absolute;top:-50%;right:-50%;width:200%;height:200%;background:radial-gradient(circle,rgba(255,255,255,0.1) 0%,transparent 60%);pointer-events:none}
+.status-label{font-size:12px;opacity:0.8;margin-bottom:4px;font-weight:500}
+.status-next{font-size:20px;font-weight:700;margin-bottom:2px}
+.status-detail{font-size:13px;opacity:0.9}
+.status-time{position:absolute;right:20px;top:50%;transform:translateY(-50%);text-align:right}
+.status-time .big{font-size:32px;font-weight:800;line-height:1}
+.status-time .small{font-size:11px;opacity:0.8}
+/* Day Tabs */
+.day-tabs{display:flex;gap:6px;padding:16px;overflow-x:auto;scrollbar-width:none}
+.day-tabs::-webkit-scrollbar{display:none}
+.day-tab{flex-shrink:0;padding:10px 14px;border-radius:var(--radius2);background:var(--bg2);border:1px solid var(--border);cursor:pointer;text-align:center;transition:all .3s;min-width:56px}
+.day-tab.active{background:linear-gradient(135deg,var(--accent),var(--accent2));border-color:transparent;transform:scale(1.05)}
+.day-tab.today{border-color:var(--accent)}
+.day-tab .weekday{font-size:11px;color:var(--text2);font-weight:500;text-transform:uppercase}
+.day-tab.active .weekday{color:rgba(255,255,255,0.8)}
+.day-tab .daynum{font-size:18px;font-weight:700;margin-top:2px}
+.day-tab .month{font-size:9px;color:var(--text3);margin-top:1px}
+.day-tab.active .month,.day-tab.active .daynum{color:#fff}
+.day-tab .dot{width:5px;height:5px;border-radius:50%;background:var(--accent);margin:4px auto 0}
+.day-tab.active .dot{background:rgba(255,255,255,0.6)}
+/* Section */
+.section{padding:0 16px}
+.section-title{font-size:13px;font-weight:600;color:var(--text2);text-transform:uppercase;letter-spacing:1px;margin:20px 0 12px;display:flex;align-items:center;gap:8px}
+.section-title .count{background:var(--accent);color:#fff;width:22px;height:22px;border-radius:50%;display:flex;align-items:center;justify-content:center;font-size:11px}
+/* Class Card */
+.class-card{background:var(--card);border-radius:var(--radius);padding:16px;margin-bottom:10px;border-left:4px solid var(--accent);position:relative;transition:all .3s}
+.class-card:hover{transform:translateX(4px)}
+.class-card.emerg-ped{border-left-color:var(--accent)}
+.class-card.emerg-cir{border-left-color:var(--orange)}
+.class-card.gestao{border-left-color:var(--green)}
+.class-card.deontologia{border-left-color:var(--pink)}
+.class-card.med-legal{border-left-color:var(--red)}
+.class-card.tcc{border-left-color:var(--accent3)}
+.class-card.active-now{border-left-color:var(--green);box-shadow:0 0 20px rgba(34,197,94,0.15);animation:pulse 2s infinite}
+@keyframes pulse{0%,100%{box-shadow:0 0 20px rgba(34,197,94,0.15)}50%{box-shadow:0 0 30px rgba(34,197,94,0.3)}}
+.card-time{display:flex;align-items:center;gap:6px;font-size:13px;font-weight:600;color:var(--accent);margin-bottom:8px}
+.card-time svg{width:14px;height:14px}
+.card-title{font-size:15px;font-weight:600;margin-bottom:4px;line-height:1.3}
+.card-code{font-size:11px;color:var(--text3);font-weight:500;margin-bottom:8px}
+.card-meta{display:flex;flex-wrap:wrap;gap:8px}
+.card-tag{display:flex;align-items:center;gap:4px;font-size:11px;color:var(--text2);background:var(--bg);padding:4px 8px;border-radius:6px}
+.card-tag svg{width:12px;height:12px}
+.now-badge{position:absolute;top:12px;right:12px;background:var(--green);color:#000;padding:3px 8px;border-radius:6px;font-size:10px;font-weight:700;text-transform:uppercase;animation:pulse 2s infinite}
+/* Stats Grid */
+.stats{display:grid;grid-template-columns:1fr 1fr;gap:10px;padding:16px}
+.stat-card{background:var(--card);border-radius:var(--radius2);padding:16px;text-align:center}
+.stat-num{font-size:28px;font-weight:800;background:linear-gradient(135deg,var(--accent),var(--accent2));-webkit-background-clip:text;-webkit-text-fill-color:transparent}
+.stat-label{font-size:11px;color:var(--text2);margin-top:4px}
+/* Bottom Nav */
+.bottom-nav{position:fixed;bottom:0;left:50%;transform:translateX(-50%);width:100%;max-width:480px;background:var(--glass);backdrop-filter:blur(20px);border-top:1px solid var(--border);display:flex;justify-content:space-around;padding:8px 0 env(safe-area-inset-bottom,8px);z-index:200}
+.nav-item{display:flex;flex-direction:column;align-items:center;gap:3px;padding:8px 16px;border-radius:12px;cursor:pointer;transition:all .3s;color:var(--text3)}
+.nav-item.active{color:var(--accent)}
+.nav-item svg{width:22px;height:22px}
+.nav-item span{font-size:10px;font-weight:500}
+/* Empty */
+.empty{text-align:center;padding:40px 20px;color:var(--text2)}
+.empty-icon{font-size:48px;margin-bottom:12px;opacity:0.5}
+.empty h3{font-size:16px;margin-bottom:4px;color:var(--text)}
+/* View Toggle */
+.view{display:none}.view.active{display:block}
+/* Disc List */
+.disc-item{display:flex;align-items:center;gap:12px;padding:14px 16px;background:var(--card);border-radius:var(--radius2);margin-bottom:8px}
+.disc-color{width:8px;height:40px;border-radius:4px}
+.disc-info h4{font-size:14px;font-weight:600}
+.disc-info p{font-size:12px;color:var(--text2)}
+.disc-days{margin-left:auto;font-size:11px;color:var(--text3);text-align:right}
+/* Week View */
+.week-grid{display:grid;grid-template-columns:repeat(5,1fr);gap:4px;padding:0 16px}
+.week-col{text-align:center}
+.week-col-header{font-size:11px;font-weight:600;color:var(--text2);padding:8px 0;border-bottom:1px solid var(--border)}
+.week-block{font-size:9px;padding:4px 2px;border-radius:4px;margin-top:3px;color:#fff;line-height:1.2}
+</style>
+</head>
+<body>
+<div class="app" id="app">
+<!-- Header -->
+<div class="header">
+<div class="header-top">
+<div class="logo">
+<div class="logo-icon">ZN</div>
+<div class="logo-text"><h1>ZARNS</h1><span>Medicina - 8o Periodo</span></div>
+</div>
+<div class="header-badge" id="statusBadge">Ativo</div>
+</div>
+<div class="status-card" id="statusCard">
+<div class="status-label">Proxima aula</div>
+<div class="status-next" id="nextClass">Carregando...</div>
+<div class="status-detail" id="nextDetail"></div>
+<div class="status-time"><div class="big" id="countdown">--:--</div><div class="small" id="countLabel">para iniciar</div></div>
+</div>
+</div>
+<!-- Day Tabs -->
+<div class="day-tabs" id="dayTabs"></div>
+<!-- Views -->
+<div class="view active" id="viewSchedule">
+<div class="section">
+<div class="section-title">Aulas do dia <span class="count" id="classCount">0</span></div>
+<div id="classList"></div>
+</div>
+</div>
+<div class="view" id="viewWeek">
+<div class="section">
+<div class="section-title">Visao Semanal</div>
+<div class="week-grid" id="weekGrid"></div>
+</div>
+</div>
+<div class="view" id="viewDisc">
+<div class="section">
+<div class="section-title">Disciplinas</div>
+<div id="discList"></div>
+</div>
+</div>
+<div class="view" id="viewStats">
+<div class="stats" id="statsGrid"></div>
+</div>
+</div>
+<!-- Bottom Nav -->
+<div class="bottom-nav">
+<div class="nav-item active" onclick="switchView('viewSchedule',this)">
+<svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><rect x="3" y="4" width="18" height="18" rx="2"/><line x1="16" y1="2" x2="16" y2="6"/><line x1="8" y1="2" x2="8" y2="6"/><line x1="3" y1="10" x2="21" y2="10"/></svg>
+<span>Hoje</span>
+</div>
+<div class="nav-item" onclick="switchView('viewWeek',this)">
+<svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><rect x="3" y="3" width="7" height="7"/><rect x="14" y="3" width="7" height="7"/><rect x="3" y="14" width="7" height="7"/><rect x="14" y="14" width="7" height="7"/></svg>
+<span>Semana</span>
+</div>
+<div class="nav-item" onclick="switchView('viewDisc',this)">
+<svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="M4 19.5A2.5 2.5 0 0 1 6.5 17H20"/><path d="M6.5 2H20v20H6.5A2.5 2.5 0 0 1 4 19.5v-15A2.5 2.5 0 0 1 6.5 2z"/></svg>
+<span>Materias</span>
+</div>
+<div class="nav-item" onclick="switchView('viewStats',this)">
+<svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><line x1="18" y1="20" x2="18" y2="10"/><line x1="12" y1="20" x2="12" y2="4"/><line x1="6" y1="20" x2="6" y2="14"/></svg>
+<span>Stats</span>
+</div>
+</div>
+<script>
+const SCHEDULE = {
+1: [ // Segunda
+{start:'10:20',end:'11:10',name:'Emerg. Pediatricas/Clinicas/Psiquiatricas',code:'MED6048',turma:'LABA2',local:'A Definir',prof:'Joanderson F. de Melo',cat:'emerg-ped'},
+{start:'11:10',end:'12:00',name:'Emerg. Pediatricas/Clinicas/Psiquiatricas',code:'MED6048',turma:'LABA2',local:'A Definir',prof:'Joanderson F. de Melo',cat:'emerg-ped'},
+{start:'13:20',end:'14:10',name:'Emerg. Cirurgicas e Obstetricas',code:'MED6052',turma:'LABA2',local:'A Definir',prof:'Tetzi O. Brandao',cat:'emerg-cir'},
+{start:'14:10',end:'15:00',name:'Emerg. Cirurgicas e Obstetricas',code:'MED6052',turma:'LABA2',local:'A Definir',prof:'Tetzi O. Brandao',cat:'emerg-cir'},
+{start:'15:20',end:'16:10',name:'Emerg. Cirurgicas e Obstetricas',code:'MED6052',turma:'LABA2',local:'A Definir',prof:'Tetzi O. Brandao',cat:'emerg-cir'},
+{start:'16:10',end:'17:00',name:'Emerg. Cirurgicas e Obstetricas',code:'MED6052',turma:'LABA2',local:'A Definir',prof:'Tetzi O. Brandao',cat:'emerg-cir'},
+{start:'17:30',end:'18:20',name:'Gestao e Empreendedorismo',code:'MED6047',turma:'MED8AI',local:'-',prof:'Francisco Junqueira Neto',cat:'gestao'},
+{start:'18:20',end:'19:10',name:'Gestao e Empreendedorismo',code:'MED6047',turma:'MED8AI',local:'-',prof:'Francisco Junqueira Neto',cat:'gestao'},
+{start:'19:30',end:'20:20',name:'Gestao e Empreendedorismo',code:'MED6047',turma:'MED8AI',local:'-',prof:'Francisco Junqueira Neto',cat:'gestao'}
+],
+2: [ // Terca
+{start:'15:20',end:'16:10',name:'Emerg. Pediatricas/Clinicas/Psiquiatricas',code:'MED6048',turma:'LABA2',local:'8o Andar - Auditorio',prof:'Julio C. de Oliveira',cat:'emerg-ped'},
+{start:'16:10',end:'17:00',name:'Emerg. Pediatricas/Clinicas/Psiquiatricas',code:'MED6048',turma:'LABA2',local:'8o Andar - Auditorio',prof:'Julio C. de Oliveira',cat:'emerg-ped'},
+{start:'19:30',end:'20:20',name:'Emerg. Cirurgicas e Obstetricas',code:'MED6052',turma:'MED8AI',local:'CESP Saber e Saude',prof:'Docente em Contratacao',cat:'emerg-cir'},
+{start:'20:20',end:'21:10',name:'Emerg. Cirurgicas e Obstetricas',code:'MED6052',turma:'MED8AI',local:'CESP Saber e Saude',prof:'Docente em Contratacao',cat:'emerg-cir'}
+],
+3: [ // Quarta
+{start:'14:10',end:'15:00',name:'Emerg. Pediatricas/Clinicas/Psiquiatricas',code:'MED6048',turma:'PA2',local:'CESP Saber e Saude',prof:'Docente em Contratacao',cat:'emerg-ped'},
+{start:'15:20',end:'16:10',name:'Emerg. Pediatricas/Clinicas/Psiquiatricas',code:'MED6048',turma:'PA2',local:'CESP Saber e Saude',prof:'Docente em Contratacao',cat:'emerg-ped'},
+{start:'16:10',end:'17:00',name:'Emerg. Pediatricas/Clinicas/Psiquiatricas',code:'MED6048',turma:'PA2',local:'CESP Saber e Saude',prof:'Docente em Contratacao',cat:'emerg-ped'}
+],
+4: [ // Quinta
+{start:'08:20',end:'09:10',name:'Emerg. Pediatricas/Clinicas/Psiquiatricas',code:'MED6048',turma:'MED8AI',local:'Biblioteca',prof:'Joanderson F. de Melo',cat:'emerg-ped'},
+{start:'09:10',end:'10:00',name:'Emerg. Pediatricas/Clinicas/Psiquiatricas',code:'MED6048',turma:'MED8AI',local:'Biblioteca',prof:'Joanderson F. de Melo',cat:'emerg-ped'},
+{start:'10:20',end:'11:10',name:'Deontologia e Etica Medica',code:'MED6051',turma:'MED8AI',local:'-',prof:'Antonio H. R. de Toledo',cat:'deontologia'},
+{start:'11:10',end:'12:00',name:'Deontologia e Etica Medica',code:'MED6051',turma:'MED8AI',local:'-',prof:'Antonio H. R. de Toledo',cat:'deontologia'},
+{start:'13:20',end:'14:10',name:'Emerg. Pediatricas/Clinicas/Psiquiatricas',code:'MED6048',turma:'MED8AI',local:'Biblioteca',prof:'Thiago W. de Oliveira',cat:'emerg-ped'},
+{start:'14:10',end:'15:00',name:'Emerg. Pediatricas/Clinicas/Psiquiatricas',code:'MED6048',turma:'MED8AI',local:'Biblioteca',prof:'Thiago W. de Oliveira',cat:'emerg-ped'},
+{start:'17:30',end:'18:20',name:'Medicina Legal',code:'MED6050',turma:'MED8AI',local:'5o Andar - TUT 08',prof:'Docente em Contratacao',cat:'med-legal'},
+{start:'18:20',end:'19:10',name:'Medicina Legal',code:'MED6050',turma:'MED8AI',local:'5o Andar - TUT 08',prof:'Docente em Contratacao',cat:'med-legal'},
+{start:'19:30',end:'20:20',name:'Medicina Legal',code:'MED6050',turma:'MED8AI',local:'5o Andar - TUT 08',prof:'Docente em Contratacao',cat:'med-legal'},
+{start:'20:20',end:'21:10',name:'TCC II',code:'MED6049',turma:'MED8AI',local:'5o Andar - TUT 04',prof:'Jose L. de O. Schiavon',cat:'tcc'}
+],
+5: [ // Sexta
+{start:'10:20',end:'11:10',name:'Emerg. Pediatricas/Clinicas/Psiquiatricas',code:'MED6048',turma:'MED8AI',local:'4o Andar - Sala 04',prof:'Docente em Contratacao',cat:'emerg-ped'},
+{start:'11:10',end:'12:00',name:'Emerg. Pediatricas/Clinicas/Psiquiatricas',code:'MED6048',turma:'MED8AI',local:'4o Andar - Sala 04',prof:'Docente em Contratacao',cat:'emerg-ped'},
+{start:'13:20',end:'14:10',name:'Emerg. Cirurgicas e Obstetricas',code:'MED6052',turma:'LABA2',local:'4o Andar - Cons. 01',prof:'Benedito M. Santana',cat:'emerg-cir'},
+{start:'14:10',end:'15:00',name:'Emerg. Cirurgicas e Obstetricas',code:'MED6052',turma:'LABA2',local:'4o Andar - Cons. 01',prof:'Benedito M. Santana',cat:'emerg-cir'},
+{start:'15:20',end:'16:10',name:'Emerg. Cirurgicas e Obstetricas',code:'MED6052',turma:'LABA2',local:'4o Andar - Cons. 01',prof:'Benedito M. Santana',cat:'emerg-cir'},
+{start:'16:10',end:'17:00',name:'Emerg. Cirurgicas e Obstetricas',code:'MED6052',turma:'LABA2',local:'4o Andar - Cons. 01',prof:'Benedito M. Santana',cat:'emerg-cir'}
+],
+0:[],6:[] // Dom e Sab
+};
+const DISC = {
+'MED6048':{name:'Emerg. Pediatricas/Clinicas/Psiquiatricas',color:'#3b82f6',days:'SEG TER QUA QUI SEX'},
+'MED6052':{name:'Emerg. Cirurgicas e Obstetricas',color:'#f59e0b',days:'SEG TER SEX'},
+'MED6047':{name:'Gestao e Empreendedorismo',color:'#22c55e',days:'SEG'},
+'MED6051':{name:'Deontologia e Etica Medica',color:'#ec4899',days:'QUI'},
+'MED6050':{name:'Medicina Legal',color:'#ef4444',days:'QUI'},
+'MED6049':{name:'TCC II',color:'#06b6d4',days:'QUI'}
+};
+const WEEKDAYS=['Dom','Seg','Ter','Qua','Qui','Sex','Sab'];
+const MONTHS=['Jan','Fev','Mar','Abr','Mai','Jun','Jul','Ago','Set','Out','Nov','Dez'];
+let selectedDate=new Date();
+
+function init(){
+buildDayTabs();
+renderDay(selectedDate);
+updateStatus();
+renderDisc();
+renderStats();
+renderWeek();
+setInterval(updateStatus,60000);
+}
+
+function buildDayTabs(){
+const c=document.getElementById('dayTabs');
+const today=new Date();
+c.innerHTML='';
+for(let i=-2;i<13;i++){
+const d=new Date(today);
+d.setDate(today.getDate()+i);
+const isToday=d.toDateString()===today.toDateString();
+const isSel=d.toDateString()===selectedDate.toDateString();
+const hasClass=SCHEDULE[d.getDay()]&&SCHEDULE[d.getDay()].length>0;
+const tab=document.createElement('div');
+tab.className='day-tab'+(isSel?' active':'')+(isToday?' today':'');
+tab.innerHTML=`<div class="weekday">${WEEKDAYS[d.getDay()]}</div><div class="daynum">${d.getDate()}</div><div class="month">${MONTHS[d.getMonth()]}</div>${hasClass?'<div class="dot"></div>':''}`;
+tab.onclick=()=>{selectedDate=new Date(d);buildDayTabs();renderDay(d)};
+c.appendChild(tab);
+}
+const active=c.querySelector('.active');
+if(active)active.scrollIntoView({behavior:'smooth',inline:'center',block:'nearest'});
+}
+function renderDay(date){
+const dow=date.getDay();
+const classes=SCHEDULE[dow]||[];
+const list=document.getElementById('classList');
+const count=document.getElementById('classCount');
+// Group consecutive same-code classes
+const grouped=[];
+classes.forEach(c=>{
+const last=grouped[grouped.length-1];
+if(last&&last.code===c.code&&last.prof===c.prof){last.end=c.end;last.slots++}
+else grouped.push({...c,slots:1})
+});
+count.textContent=grouped.length;
+if(!grouped.length){
+list.innerHTML='<div class="empty"><div class="empty-icon">&#127774;</div><h3>Sem aulas hoje!</h3><p>Aproveite o dia de folga</p></div>';
+return}
+const now=new Date();
+const nowMin=now.getHours()*60+now.getMinutes();
+const isToday=date.toDateString()===now.toDateString();
+list.innerHTML=grouped.map(c=>{
+const [sh,sm]=c.start.split(':').map(Number);
+const [eh,em]=c.end.split(':').map(Number);
+const startMin=sh*60+sm,endMin=eh*60+em;
+const isNow=isToday&&nowMin>=startMin&&nowMin<endMin;
+return `<div class="class-card ${c.cat}${isNow?' active-now':''}">
+${isNow?'<div class="now-badge">AGORA</div>':''}
+<div class="card-time">
+<svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><circle cx="12" cy="12" r="10"/><polyline points="12 6 12 12 16 14"/></svg>
+${c.start} - ${c.end} ${c.slots>1?'('+c.slots+' aulas)':''}
+</div>
+<div class="card-title">${c.name}</div>
+<div class="card-code">${c.code} | Turma: ${c.turma}</div>
+<div class="card-meta">
+<div class="card-tag"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="M21 10c0 7-9 13-9 13s-9-6-9-13a9 9 0 0 1 18 0z"/><circle cx="12" cy="10" r="3"/></svg>${c.local}</div>
+<div class="card-tag"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="M20 21v-2a4 4 0 0 0-4-4H8a4 4 0 0 0-4 4v2"/><circle cx="12" cy="7" r="4"/></svg>${c.prof}</div>
+</div>
+</div>`}).join('');
+}
+function updateStatus(){
+const now=new Date();
+const dow=now.getDay();
+const nowMin=now.getHours()*60+now.getMinutes();
+const classes=SCHEDULE[dow]||[];
+const el=document.getElementById('nextClass');
+const det=document.getElementById('nextDetail');
+const cd=document.getElementById('countdown');
+const cl=document.getElementById('countLabel');
+const badge=document.getElementById('statusBadge');
+// Find current or next class
+let current=null,next=null;
+for(const c of classes){
+const [sh,sm]=c.start.split(':').map(Number);
+const [eh,em]=c.end.split(':').map(Number);
+const s=sh*60+sm,e=eh*60+em;
+if(nowMin>=s&&nowMin<e){current=c;break}
+if(s>nowMin&&!next){next=c;break}
+}
+if(current){
+el.textContent=current.name;
+det.textContent=current.local+' | '+current.prof;
+const [eh,em]=current.end.split(':').map(Number);
+const diff=(eh*60+em)-nowMin;
+cd.textContent=diff+'min';
+cl.textContent='restante';
+badge.textContent='Em aula';
+badge.style.background='var(--green)';
+}else if(next){
+el.textContent=next.name;
+det.textContent=next.start+' | '+next.local;
+const [sh,sm]=next.start.split(':').map(Number);
+const diff=(sh*60+sm)-nowMin;
+const h=Math.floor(diff/60),m=diff%60;
+cd.textContent=h>0?h+'h'+String(m).padStart(2,'0'):m+'min';
+cl.textContent='para iniciar';
+badge.textContent='Ativo';
+badge.style.background='var(--green)';
+}else{
+el.textContent=dow===0||dow===6?'Fim de semana':'Aulas encerradas';
+det.textContent='Proximo dia com aulas: '+getNextClassDay();
+cd.textContent='--:--';
+cl.textContent='';
+badge.textContent='Livre';
+badge.style.background='var(--accent3)';
+}
+renderDay(selectedDate);
+}
+function getNextClassDay(){
+const now=new Date();
+for(let i=1;i<=7;i++){
+const d=new Date(now);d.setDate(now.getDate()+i);
+if(SCHEDULE[d.getDay()]&&SCHEDULE[d.getDay()].length>0)
+return WEEKDAYS[d.getDay()]+' '+d.getDate()+'/'+MONTHS[d.getMonth()];
+}
+return '-';
+}
+function switchView(id,el){
+document.querySelectorAll('.view').forEach(v=>v.classList.remove('active'));
+document.getElementById(id).classList.add('active');
+document.querySelectorAll('.nav-item').forEach(n=>n.classList.remove('active'));
+el.classList.add('active');
+}
+function renderDisc(){
+const list=document.getElementById('discList');
+list.innerHTML=Object.entries(DISC).map(([code,d])=>
+`<div class="disc-item">
+<div class="disc-color" style="background:${d.color}"></div>
+<div class="disc-info"><h4>${d.name}</h4><p>${code}</p></div>
+<div class="disc-days">${d.days}</div>
+</div>`).join('');
+}
+function renderStats(){
+const g=document.getElementById('statsGrid');
+const totalAulas=Object.values(SCHEDULE).reduce((a,b)=>a+b.length,0);
+const totalDisc=Object.keys(DISC).length;
+const daysWithClass=[1,2,3,4,5].filter(d=>SCHEDULE[d].length>0).length;
+const maxDay=Object.entries(SCHEDULE).reduce((a,[k,v])=>v.length>a[1].length?[k,v]:a,['0',[]]);
+const dayNames={0:'Dom',1:'Seg',2:'Ter',3:'Qua',4:'Qui',5:'Sex',6:'Sab'};
+g.innerHTML=`
+<div class="stat-card"><div class="stat-num">${totalAulas}</div><div class="stat-label">Aulas/Semana</div></div>
+<div class="stat-card"><div class="stat-num">${totalDisc}</div><div class="stat-label">Disciplinas</div></div>
+<div class="stat-card"><div class="stat-num">${daysWithClass}</div><div class="stat-label">Dias com Aula</div></div>
+<div class="stat-card"><div class="stat-num">${dayNames[maxDay[0]]}</div><div class="stat-label">Dia Mais Cheio (${maxDay[1].length}h)</div></div>
+<div class="stat-card"><div class="stat-num">8o</div><div class="stat-label">Periodo</div></div>
+<div class="stat-card"><div class="stat-num">T8</div><div class="stat-label">Turma MED8BI</div></div>
+`;
+}
+function renderWeek(){
+const g=document.getElementById('weekGrid');
+const days=[1,2,3,4,5];
+const names=['SEG','TER','QUA','QUI','SEX'];
+const colors={'emerg-ped':'#3b82f6','emerg-cir':'#f59e0b','gestao':'#22c55e','deontologia':'#ec4899','med-legal':'#ef4444','tcc':'#06b6d4'};
+g.innerHTML=days.map((d,i)=>{
+const classes=SCHEDULE[d]||[];
+const grouped=[];
+classes.forEach(c=>{
+const last=grouped[grouped.length-1];
+if(last&&last.code===c.code&&last.prof===c.prof){last.end=c.end}
+else grouped.push({...c})
+});
+return `<div class="week-col">
+<div class="week-col-header">${names[i]}</div>
+${grouped.map(c=>`<div class="week-block" style="background:${colors[c.cat]||'#666'}">${c.start}<br>${c.code.replace('MED','')}</div>`).join('')}
+</div>`}).join('');
+}
+document.addEventListener('DOMContentLoaded',init);
+</script>
+</body>
+</html>
