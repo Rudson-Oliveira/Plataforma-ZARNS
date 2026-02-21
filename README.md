@@ -193,3 +193,105 @@
 ---
 
 *Documentacao gerada em 21/02/2026 - Plataforma Clariens/ZARNS*
+
+
+
+---
+
+## Avisos do WhatsApp - Grupo 1a Turma Medicina 8o Periodo
+*Atualizado em: 21/02/2026*
+
+### Avisos Importantes (Inapos Secretaria - Ontem 20/02)
+
+#### 1. Horarios Finais Divulgados
+- Versao final dos horarios de aula foi enviada
+- PDF: HORARIO FINAL 8o PERIODO.pdf (3 paginas, 674 KB)
+- Ambulatorios inicio a partir de 24/02
+- Possiveis ajustes de salas apos entrega do predio anexo
+
+#### 2. Psiquiatria Extra
+- Em razao da mudanca de matriz curricular
+- Conteudo extra de **Psiquiatria** inserido as **sextas-feiras, a cada 15 dias**
+
+#### 3. Trocas de Turma
+- Pedidos com informacoes corretas e completas ja foram analisados
+- Alteracoes atualizadas no sistema
+- Ate segunda-feira (23/02) todos os pedidos estarao finalizados
+- Acompanhar Portal do Aluno para alocacao definitiva
+
+#### 4. Recepcao Novo Campus - 23/02
+- **8o Periodo Medicina: 08h30** (seu horario!)
+- Cada turma deve comparecer exclusivamente no horario indicado
+- Local: Novo Campus ZARNS Pouso Alegre
+
+#### 5. Comunicado Anterior (12/02)
+- Horario divulgado ate entao era previa (nao definitivo)
+- Horario final com alocacoes em sala divulgado posteriormente
+- Solicitacoes de troca sem info completa = indeferimento automatico
+- Possibilidade de aulas aos sabados neste semestre
+
+---
+
+## Analise de Turmas e Subturmas
+
+### Sua Alocacao no Portal
+- **Turma Principal:** 60_MED8BI_T8
+- **Turmas nas Disciplinas:**
+
+| Turma | Tipo | Disciplinas |
+|-------|------|------------|
+| 60_MED8AI | Principal | Gestao e Empreendedorismo, Deontologia e Etica, Medicina Legal, TCC II |
+| 60_MED8AI_LABA2 | Laboratorio/Pratica | Emerg. Pediatricas (Seg), Emerg. Cirurgicas (Seg/Sex) |
+| 60_MED8AI_PA2 | Pratica Ambulatorial | Emerg. Pediatricas (Qua) |
+| 60_MED8AI | Teorica | Emerg. Pediatricas (Qui/Sex), Emerg. Cirurgicas (Ter) |
+
+### Entendimento das Subturmas
+
+**Turma A (60_MED8AI):**
+- Voce pertence a Turma A do 8o periodo
+- "AI" = A + Itumbiara/INAPOS (campus)
+
+**Subturma LABA2:**
+- Grupo de laboratorio/pratica 2
+- Aulas praticas de simulacao de emergencias
+- Segunda: Emerg. Pediatricas + Cirurgicas (integral)
+- Sexta: Emerg. Cirurgicas com Prof. Benedito Martinho (4o Andar)
+
+**Subturma PA2:**
+- Grupo de Pratica Ambulatorial 2
+- Quarta: Emerg. Pediatricas no CESP. SABER E SAUDE
+
+### Resumo Semanal por Turma
+
+| Dia | Turma | Atividade | Horario |
+|-----|-------|-----------|--------|
+| Seg | LABA2 | Emerg. Pediatricas (Lab) | 10:20-12:00 |
+| Seg | LABA2 | Emerg. Cirurgicas (Lab) | 13:20-17:00 |
+| Seg | AI | Gestao e Empreendedorismo | 17:30-20:20 |
+| Ter | LABA2 | Emerg. Pediatricas (Auditorio) | 15:20-17:00 |
+| Ter | AI | Emerg. Cirurgicas (CESP) | 19:30-21:10 |
+| Qua | PA2 | Emerg. Pediatricas (CESP) | 14:10-17:00 |
+| Qui | AI | Emerg. Pediatricas (Biblioteca) | 08:20-10:00 |
+| Qui | AI | Deontologia e Etica | 10:20-12:00 |
+| Qui | AI | Emerg. Pediatricas (Biblioteca) | 13:20-15:00 |
+| Qui | AI | Medicina Legal | 17:30-20:20 |
+| Qui | AI | TCC II | 19:30-21:10 |
+| Sex | AI | Emerg. Pediatricas (4o Andar) | 10:20-12:00 |
+| Sex | LABA2 | Emerg. Cirurgicas (4o Andar) | 13:20-17:00 |
+| Sex* | AI | Psiquiatria (quinzenal) | A confirmar |
+
+> *Nota: Psiquiatria foi adicionada as sextas-feiras a cada 15 dias conforme aviso da secretaria.*
+
+---
+
+## Proximos Passos Importantes
+
+1. **23/02 (Segunda)** - Recepcao no Novo Campus as 08h30
+2. **24/02 (Terca)** - Inicio dos ambulatorios
+3. **Ate 23/02** - Verificar alocacao definitiva no Portal do Aluno
+4. **Quinzenalmente** - Psiquiatria as sextas-feiras
+5. **Acompanhar** - Canais oficiais para ajustes de salas
+
+---
+
+*Atualizado em 21/02/2026 - Dados do WhatsApp + Portal Clariens/ZARNS*
